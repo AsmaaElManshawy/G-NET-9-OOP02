@@ -763,6 +763,33 @@
             //Console.WriteLine("Part 01\nQuestion 03");
             //Console.WriteLine("\n" + new string('-', 50) + "\n");
 
+            // Answers:
+            // a) `this[int index]` is called an indexer.
+            // It allows instances of the class to be indexed like arrays,
+            // providing a way to access elements in the internal collection using array-like syntax.
+
+            // b) If someone writes `register[10] = "Ali";`,
+            // it will throw an IndexOutOfRangeException because the index 10 is out of bounds for the array of size 5.
+            // To make the indexer safer, you could add a check to ensure the index is within valid bounds
+            // before accessing the array.
+            
+            // c) Yes, a class can have more than one indexer with different parameter types.
+            // For example, you could have one indexer that takes an int for accessing by index
+            // and another that takes a string for accessing by name:
+            
+            //    public string this[string name]
+            //    {
+            //        get { return names.FirstOrDefault(n => n == name); }
+            //        set
+            //        {
+            //            int index = Array.IndexOf(names, name);
+            //            if (index >= 0)
+            //                names[index] = value;
+            //        }
+            //    }
+
+
+
             #endregion
 
             #region Question 4
