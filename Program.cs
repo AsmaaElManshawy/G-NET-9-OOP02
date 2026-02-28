@@ -772,11 +772,11 @@
             // it will throw an IndexOutOfRangeException because the index 10 is out of bounds for the array of size 5.
             // To make the indexer safer, you could add a check to ensure the index is within valid bounds
             // before accessing the array.
-            
+
             // c) Yes, a class can have more than one indexer with different parameter types.
             // For example, you could have one indexer that takes an int for accessing by index
             // and another that takes a string for accessing by name:
-            
+
             //    public string this[string name]
             //    {
             //        get { return names.FirstOrDefault(n => n == name); }
@@ -812,12 +812,29 @@
              * How is it different from the `Item` field?
              * 
              * b) Can a static method inside `Order` access the `Item` field directly? Why or why not?
-
              * 
              */
 
             //Console.WriteLine("Part 01\nQuestion 04");
             //Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+            //Answers:
+
+            //a) What does the `static` keyword mean on `TotalOrders`? 
+
+            //It belongs to the class itself, not to individual objects.
+            //There is only ONE copy shared by all instances.
+
+            //How is it different from the `Item` field?
+
+            //`Item` is an instance field, meaning each Order object has its own `Item` value.
+
+            //b) Can a static method inside `Order` access the `Item` field directly? Why or why not?
+
+            //No, a static method cannot access the `Item` field directly
+            //because `Item` is an instance member that requires an object instance to access it.
+            //Static methods do not have access to instance members unless they are given a reference to an instance of the class.
+
 
             #endregion
 
