@@ -1,5 +1,14 @@
 ﻿namespace Assignment_2
 {
+    //Part 02
+    // Enums for TicketType
+    public enum TicketType
+    {
+        Standard,
+        VIP,
+        IMAX
+    }
+
     internal class Program
     {
         static void Main(string[] args)
@@ -850,75 +859,8 @@
              * What you need to build : 
              */
 
-
-            #region 1. Refactor the Ticket class
-            /*
-             * 
-             * 1. Refactor the Ticket class to use proper encapsulation: 
-             * 
-             *    a. Create public properties for each field with the following validation rules: 
-             *    
-             *       • MovieName : cannot be null or empty. If an invalid value is set, keep the previous value.
-             *       
-             *       • Type : use the TicketType enum from Assignment 01 (no special validation needed).
-             *       
-             *       • Seat : use the SeatLocation struct from Assignment 01 (no special validation needed). 
-             *       
-             *       • Price : must be greater than 0. If an invalid value is set, keep the previous value.
-             *       
-             *    b. Add property PriceAfterTax that returns the price with 14% tax included (calculated, not stored).
-             */
-
-            #endregion
-
-            #region 2. Add a static field and a static method to the Ticket class
-            /*
-             *2. Add a static field and a static method to the Ticket class: 
-             *  a. Add a ’ticketCounter’ field that starts at 0. 
-             *  
-             *  b. Add a ‘TicketId’ property. Each ticket gets a unique ID automatically when created 
-             *  (increment ticketCounter in the constructor and assign it to the ID). 
-             *  
-             *  c. Add a ‘GetTotalTicketsSold()’ method that returns the current value of ticketCounter.
-             *
-             */
-
-            #endregion
-
-            #region 3. Create a Cinema class
-
-            /*
-             * 3. Create a Cinema class that holds up to 20 tickets using a private array. 
-             * Add the following: 
-             *    a. Allow User To get and set tickets by index if the index is out of range, 
-             *    the getter returns null and the setter does nothing. 
-             *    
-             *    b. Allow User To Get Movie By movieName that returns the first ticket found matching the given movie name, 
-             *    or null if not found. 
-             *    
-             *    c. A method AddTicket(Ticket t) that adds a ticket to the first available (null) slot. 
-             *    Returns true if added, false if the cinema is full.
-             * 
-             */
-
-            #endregion
-
-            #region 4. Create a static utility class
-            /*
-             * 
-             * 4. Create a static utility class called BookingHelper with the following static methods: 
-             *     a. double CalcGroupDiscount(int numberOfTickets, double pricePerTicket) 
-             *     That returns total price with a 10% discount if the group has 5 or more tickets, 
-             *     otherwise returns the full total. 
-             *     
-             *     b. string GenerateBookingReference() That returns a unique string each time it is called 
-             *     (e.g., "BK-1", "BK-2", "BK-3", ...). Use a private static counter internally.
-             * 
-             */
-
-            #endregion
-
             #region 5. In your Main method
+
             /*
              * 5. In your Main method, build a Console Application that does the following: 
              * 
@@ -939,8 +881,105 @@
              * 
              */
 
-            //Console.WriteLine("Part 02");
-            //Console.WriteLine("\n" + new string('-', 50) + "\n");
+            Console.WriteLine("Part 02");
+            Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+            #region Point 5-A
+            // a. Ask the user to enter data for 3 tickets (movie name, ticket type, seat row, seat number, price).
+            Cinema cinema = new Cinema();
+
+            Console.WriteLine("========== Ticket Booking ==========\n");
+
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"\nEnter data for Ticket {i + 1}:");
+
+                Console.Write("Movie Name: ");
+                string movieName = Console.ReadLine();
+
+                int typeInput;
+                Console.Write("Ticket Type (0=Standard, 1=VIP, 2=IMAX): ");
+                while (!int.TryParse(Console.ReadLine(), out typeInput) || typeInput < 0 || typeInput > 2)
+                {
+                    Console.Write("Invalid input. Please enter 0, 1, or 2: ");
+                }
+
+                char row;
+                Console.Write("Seat Row (A-Z): ");
+                // check if it's a capital letter and dosen't convert input to uppercase and check if it's between A and Z
+                ////while (!char.TryParse(Console.ReadLine(), out row) || !char.IsLetter(row) || !char.IsUpper(row) )
+                //convert input to uppercase and check if it's between A and Z 
+                while (!char.TryParse(Console.ReadLine().ToUpper(), out row) || row < 'A' || row > 'Z')
+                {
+                    Console.Write("Invalid input. Please enter a capital letter (A-Z): ");
+                }
+
+                int seatNumber;
+                Console.Write("Seat Number: ");
+                while (!int.TryParse(Console.ReadLine(), out seatNumber) || seatNumber <= 0)
+                {
+                    Console.Write("Invalid input. Please enter a valid positive number: ");
+                }
+                // Create the seat location
+                SeatLocation seat = new SeatLocation(row, seatNumber);
+
+                double price;
+                Console.Write("Price: ");
+                while (!double.TryParse(Console.ReadLine(), out price) || price <= 0)
+                {
+                    Console.Write("Invalid input. Please enter a valid positive price: ");
+                }
+                // Create the ticket and add it to the cinema
+                Ticket ticket = new Ticket(movieName, (TicketType)typeInput, seat, price);
+                // Add the ticket to the cinema
+                cinema.AddTicket(ticket);
+            }
+
+            #endregion
+
+            #region Point 5-B
+            // b. Print all 3 tickets (access by index 0, 1, 2) 
+            Console.WriteLine("\n========== All Tickets ==========\n");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine(cinema[i]);
+            }
+
+            #endregion
+
+            #region Point 5-C
+            // c. Ask the user for a movie name and search for it.
+            Console.WriteLine("\n========== Search by Movie ==========");
+            Console.Write("Enter movie name to search: ");
+            string searchName = Console.ReadLine();
+
+            //Return the first ticket that matches the movie name, or null if not found
+            Ticket found = cinema.GetMovieByName(searchName);
+
+            if (found != null)
+                Console.WriteLine("Found: " + found);
+            else
+                Console.WriteLine("Movie not found.");
+
+            #endregion
+
+            #region Point 5-D
+            // d. Print the total tickets sold using the method.
+            Console.WriteLine("\n========== Statistics ==========");
+            Console.WriteLine($"Total Tickets Sold: {Ticket.GetTotalTicketsSold()}");
+            #endregion
+
+            #region Point 5-E
+            // e. Generate and print 2 booking references.
+            Console.WriteLine($"\nBooking References 1: {BookingHelper.GenerateBookingReference()}");
+            Console.WriteLine($"Booking References 2: {BookingHelper.GenerateBookingReference()}");
+            #endregion
+
+            #region Point 5-F
+            // f. Calculate and print the group discount for a group of 5 tickets at 80 EGP each of them.
+            double discount = BookingHelper.CalcGroupDiscount(5, 80);
+            Console.WriteLine($"\nGroup Discount (5 tickets x 80 EGP): {discount} EGP (10% off applied)");
+            #endregion
 
             #endregion
 
